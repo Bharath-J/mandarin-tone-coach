@@ -1,0 +1,27 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Data — corpus and large generated files
+Data/data_aishell/
+Data/data_aishell.tgz
+Data/tone_dataset.csv
+
+# Keep reference contours (small .npz files)
+!Data/reference_contours/
+
+# macOS
+.DS_Store
+
+# PyCharm
+.idea/
+
+# Temp Excel lock files
+~$*.xlsx
+
+# Jupyter
+.ipynb_checkpoints/
