@@ -10,6 +10,11 @@ __pycache__/
 Data/data_aishell/
 Data/data_aishell.tgz
 Data/tone_dataset.csv
+Data/tone_perfect/
+
+# Keep metadata and reference files
+!Data/tone_perfect_metadata.csv
+!Data/reference_contours/
 
 # Keep reference contours (small .npz files)
 !Data/reference_contours/
