@@ -1,0 +1,28 @@
+V3 CLASSIFICATION REPORT
+========================================
+N_POINTS: 20
+Best SVM params: {'C': 50, 'gamma': 0.01}
+Best CV accuracy: 0.9727
+
+Train accuracy: 0.9973
+Test  accuracy: 0.9079
+V1 baseline:    0.9195
+
+              precision    recall  f1-score   support
+
+    T1(flat)       0.97      0.98      0.97       820
+    T2(rise)       0.88      0.83      0.86       820
+     T3(dip)       0.81      0.87      0.84       820
+    T4(fall)       0.98      0.95      0.97       820
+
+    accuracy                           0.91      3280
+   macro avg       0.91      0.91      0.91      3280
+weighted avg       0.91      0.91      0.91      3280
+
+
+Confusion Matrix:
+     T1    T2    T3    T4
+T1   803    11     2     4
+T2     3   682   132     3
+T3    24    79   710     7
+T4     1     2    34   783
