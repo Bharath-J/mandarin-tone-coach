@@ -7,11 +7,11 @@ Test  speakers: Female Voice 3, Male Voice 3
 Train samples: 6557
 Test  samples: 3280
 
-SVM  train accuracy: 0.9947
-SVM  test  accuracy: 0.9195
+SVM  train accuracy: 0.9950
+SVM  test  accuracy: 0.9171
 
-MLP  train accuracy: 0.9838
-MLP  test  accuracy: 0.9052
+MLP  train accuracy: 0.9980
+MLP  test  accuracy: 0.9110
 
 Best model: SVM
 
@@ -19,8 +19,8 @@ Classification Report (SVM):
               precision    recall  f1-score   support
 
     T1(flat)       0.98      0.99      0.98       820
-    T2(rise)       0.90      0.84      0.87       820
-     T3(dip)       0.81      0.90      0.85       820
+    T2(rise)       0.90      0.83      0.87       820
+     T3(dip)       0.81      0.89      0.85       820
     T4(fall)       0.99      0.95      0.97       820
 
     accuracy                           0.92      3280
@@ -31,6 +31,6 @@ weighted avg       0.92      0.92      0.92      3280
 Confusion Matrix (SVM):
      T1    T2    T3    T4
 T1   810     6     2     2
-T2     2   686   132     0
-T3    13    66   737     4
-T4     1     1    35   783
+T2     2   684   134     0
+T3    15    69   732     4
+T4     1     1    36   782

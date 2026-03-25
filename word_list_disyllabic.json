@@ -1,0 +1,22 @@
+[
+  {"pinyin": "māmā",     "tones": [1,1], "syllables": ["mā","mā"],       "character": "妈妈", "meaning": "mom",           "tone_combo": "T1+T1", "sandhi": false},
+  {"pinyin": "jīnián",   "tones": [1,2], "syllables": ["jī","nián"],     "character": "今年", "meaning": "this year",     "tone_combo": "T1+T2", "sandhi": false},
+  {"pinyin": "fēijī",    "tones": [1,1], "syllables": ["fēi","jī"],      "character": "飞机", "meaning": "airplane",      "tone_combo": "T1+T1", "sandhi": false},
+  {"pinyin": "chīfàn",   "tones": [1,4], "syllables": ["chī","fàn"],     "character": "吃饭", "meaning": "eat a meal",    "tone_combo": "T1+T4", "sandhi": false},
+  {"pinyin": "xuéshēng", "tones": [2,1], "syllables": ["xué","shēng"],   "character": "学生", "meaning": "student",       "tone_combo": "T2+T1", "sandhi": false},
+  {"pinyin": "nánrén",   "tones": [2,2], "syllables": ["nán","rén"],     "character": "男人", "meaning": "man",           "tone_combo": "T2+T2", "sandhi": false},
+  {"pinyin": "míngtiān", "tones": [2,1], "syllables": ["míng","tiān"],   "character": "明天", "meaning": "tomorrow",      "tone_combo": "T2+T1", "sandhi": false},
+  {"pinyin": "péngyou",  "tones": [2,3], "syllables": ["péng","yǒu"],    "character": "朋友", "meaning": "friend",        "tone_combo": "T2+T3", "sandhi": false},
+  {"pinyin": "lǎoshī",   "tones": [3,1], "syllables": ["lǎo","shī"],     "character": "老师", "meaning": "teacher",       "tone_combo": "T3+T1", "sandhi": false},
+  {"pinyin": "měilì",    "tones": [3,4], "syllables": ["měi","lì"],      "character": "美丽", "meaning": "beautiful",     "tone_combo": "T3+T4", "sandhi": false},
+  {"pinyin": "shàngkē",  "tones": [4,1], "syllables": ["shàng","kē"],    "character": "上课", "meaning": "go to class",   "tone_combo": "T4+T1", "sandhi": false},
+  {"pinyin": "diànhuà",  "tones": [4,4], "syllables": ["diàn","huà"],    "character": "电话", "meaning": "telephone",     "tone_combo": "T4+T4", "sandhi": false},
+  {"pinyin": "dàxué",    "tones": [4,2], "syllables": ["dà","xué"],      "character": "大学", "meaning": "university",    "tone_combo": "T4+T2", "sandhi": false},
+  {"pinyin": "rìběn",    "tones": [4,3], "syllables": ["rì","běn"],      "character": "日本", "meaning": "Japan",         "tone_combo": "T4+T3", "sandhi": false},
+  {"pinyin": "màipiào",  "tones": [4,4], "syllables": ["mài","piào"],    "character": "卖票", "meaning": "sell tickets",  "tone_combo": "T4+T4", "sandhi": false},
+  {"pinyin": "nǐhǎo",    "tones": [3,3], "syllables": ["nǐ","hǎo"],      "character": "你好", "meaning": "hello",         "tone_combo": "T3+T3", "sandhi": true},
+  {"pinyin": "kěyǐ",     "tones": [3,3], "syllables": ["kě","yǐ"],       "character": "可以", "meaning": "can / may",     "tone_combo": "T3+T3", "sandhi": true},
+  {"pinyin": "suǒyǐ",    "tones": [3,3], "syllables": ["suǒ","yǐ"],      "character": "所以", "meaning": "therefore",     "tone_combo": "T3+T3", "sandhi": true},
+  {"pinyin": "wǒmen",    "tones": [3,5], "syllables": ["wǒ","men"],      "character": "我们", "meaning": "we / us",       "tone_combo": "T3+neutral", "sandhi": false},
+  {"pinyin": "lǎoshǔ",   "tones": [3,3], "syllables": ["lǎo","shǔ"],     "character": "老鼠", "meaning": "mouse / rat",   "tone_combo": "T3+T3", "sandhi": true}
+]

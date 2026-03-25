@@ -84,6 +84,8 @@ def extract_features(filepath: str):
         features["f0_slope"]     = round(slope, 4)
         features["duration"]     = round(float(snd.duration), 4)
         features["voiced_ratio"] = round(voiced_ratio, 4)
+        # Position of F0 minimum — key T2/T3 discriminator (T2≈0.39, T3≈0.57)
+        features["f0_min_pos"]   = round(float(np.argmin(f0_norm) / (N_POINTS - 1)), 4)
 
         return features
 
@@ -105,7 +107,7 @@ if __name__ == "__main__":
     f0_cols      = [f"f0_{i+1:02d}" for i in range(N_POINTS)]
     delta_cols   = [f"d0_{i+1:02d}" for i in range(N_POINTS - 1)]
     stat_cols    = ["f0_mean", "f0_std", "f0_min", "f0_max", "f0_slope",
-                    "duration", "voiced_ratio"]
+                    "duration", "voiced_ratio", "f0_min_pos"]
     feature_cols = f0_cols + delta_cols + stat_cols
     all_cols     = ["id", "syllable", "tone", "speaker", "gender"] + feature_cols
 

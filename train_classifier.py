@@ -42,7 +42,8 @@ TRAIN_SPEAKERS = {"Female Voice 1", "Female Voice 2", "Male Voice 1", "Male Voic
 FEATURE_COLS = (
     [f"f0_{i+1:02d}" for i in range(10)] +
     [f"d0_{i+1:02d}" for i in range(9)]  +
-    ["f0_mean", "f0_std", "f0_min", "f0_max", "f0_slope", "duration", "voiced_ratio"]
+    ["f0_mean", "f0_std", "f0_min", "f0_max", "f0_slope",
+     "duration", "voiced_ratio", "f0_min_pos"]
 )
 
 # ── Load features ──────────────────────────────────────────────────────────────
@@ -180,8 +181,12 @@ Confusion Matrix ({best_name}):
 with open(MODELS_DIR / "classification_report.txt", "w") as f:
     f.write(report_text)
 
+with open(MODELS_DIR / "feature_cols.pkl", "wb") as f:
+    pickle.dump(list(FEATURE_COLS), f)
+
 print(f"  svm_classifier.pkl")
 print(f"  mlp_classifier.pkl")
 print(f"  scaler.pkl")
+print(f"  feature_cols.pkl")
 print(f"  classification_report.txt")
 print("\nDone.")
