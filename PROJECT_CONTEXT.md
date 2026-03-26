@@ -186,9 +186,8 @@ Referenced in app.py via: reference_contours[tone_num] → loaded from Data/refe
 |------|-------|--------|
 | 8 | Environment setup, AISHELL-1 exploration, Tone Perfect corpus download, reference contours | ✅ Complete |
 | 9 | Feature extraction (27 features), SVM+MLP training (91.95%), confusion matrix, T2/T3 iteration | ✅ Complete |
-| 10 | Streamlit app (monosyllabic), silence trimming, T2/T3 rule fix, word list (40 words), Milestone 1 slides | ✅ Complete (video pending) |
-| 11 | Disyllabic word list (20 words), disyllabic mode in app | 🔄 In progress |
-| 11 remaining | Plain-language cues for all T1-T4 pairs (awaiting mentor feedback), UI polish, Status Check 4 | ⏳ Pending |
+| 10 | Streamlit app (monosyllabic), silence trimming, T2/T3 rule fix, word list (40 words), Milestone 1 slides | ✅ Complete |
+| 11 | Disyllabic word list + mode, word list fixes, disyllabic boundary/classifier fixes, confidence bars, UI polish, all 12 T→T feedback pairs | ✅ Complete (Status Check 4 pending — Bharath writes) |
 | 12 | Pre/post perception test design, TAM survey, consent materials, recruitment | ⏳ Pending |
 | 13 | Run 6-10 evaluation sessions, data collection, Milestone 2 | ⏳ Pending |
 | 14-16 | Analysis, paper writing, final submission | ⏳ Pending |
@@ -197,17 +196,16 @@ Referenced in app.py via: reference_contours[tone_num] → loaded from Data/refe
 
 ## 9. PENDING DECISIONS / OPEN QUESTIONS
 
-1. **Task 11.1 (feedback cues):** Waiting for mentor/peer feedback from Milestone 1 before
-   finalising all 12 T→T error message pairs. Currently only 8 of 12 pairs have specific messages.
+1. **Word list buckets (mentor suggestion):** Mentor suggested organising words into difficulty
+   buckets (e.g. easy T1/T4, hard T2/T3, minimal pairs). Deferred — not blocking Week 12.
 
-2. **Task 11.4 (UI polish):** Waiting for Milestone 1 feedback to know what to change.
+2. **Confusion matrix in app (mentor suggestion):** Mentor suggested surfacing the confusion
+   matrix in the app UI. Deferred — not blocking Week 12.
 
-3. **Disyllabic syllable splitting:** Currently uses energy minimum in middle 40% of recording.
-   This is a heuristic — may not work perfectly for all words. If issues arise, consider
-   asking learner to pause briefly between syllables or record each syllable separately.
+3. **Disyllabic syllable splitting:** Energy minimum + pitch-discontinuity fallback implemented.
+   Works well for tested words. May still have edge cases for unusual onsets.
 
-4. **Bu et al. (2025) corpus:** Author was contacted but no response. Not blocking anything —
-   AISHELL-1 dev/test splits used for generalisation testing instead.
+4. **Bu et al. (2025) corpus:** Author was contacted but no response. Not blocking anything.
 
 ---
 
@@ -266,9 +264,11 @@ Full reference list in Project_Proposal_bjagadish3.docx
 1. Read this file first (PROJECT_CONTEXT.md)
 2. Read app.py to understand current app state
 3. Check what week task we are on and what's pending
-4. Current focus: Week 11 tasks
-   - 11.1: Plain-language correction cues (waiting for mentor feedback)
-   - 11.2/11.3: Disyllabic words DONE — test app.py disyllabic mode
-   - 11.4: UI polish (waiting for Milestone 1 feedback)
-   - 11.5: Status Check 4 (Bharath writes this)
-5. Next major milestone: Week 12 — evaluation design (perception test, TAM survey)
+4. Current focus: Week 12
+   - Pre/post perception test design
+   - TAM survey instrument
+   - Consent materials
+   - Participant recruitment
+5. Week 11 is fully complete except Status Check 4 (Bharath writes)
+6. Environment: venv at project root. Install with --index-url https://pypi.org/simple/
+   (corporate PyPI proxy does not carry audio-recorder-streamlit or matplotlib)

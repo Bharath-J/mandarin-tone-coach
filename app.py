@@ -186,6 +186,34 @@ def extract_features_disyllabic(wav_bytes: bytes,
 
         if mid_energies:
             boundary_t = min(mid_energies, key=lambda x: x[1])[0]
+
+            # Check if the energy dip is shallow (voiced-to-voiced transition,
+            # e.g. nánrén where n→r never drops in energy).
+            # If so, fall back to pitch discontinuity: at a syllable boundary
+            # F0 typically resets downward even when energy stays high.
+            all_energies_vals = [e for _, e in energies]
+            max_e = max(all_energies_vals) if all_energies_vals else 1.0
+            min_e = min(e for _, e in mid_energies)
+            dip_ratio = min_e / max_e if max_e > 0 else 1.0
+
+            if dip_ratio > 0.55:   # shallow dip → try pitch reset instead
+                try:
+                    pitch   = snd.to_pitch(pitch_floor=PITCH_FLOOR, pitch_ceiling=PITCH_CEIL)
+                    f0_arr  = pitch.selected_array["frequency"]
+                    t_arr   = pitch.xs()
+                    mid_mask = (t_arr >= mid_start) & (t_arr <= mid_end)
+                    mid_t    = t_arr[mid_mask]
+                    mid_f0   = f0_arr[mid_mask]
+                    voiced   = mid_f0 > 0
+                    if voiced.sum() > 4:
+                        v_t  = mid_t[voiced]
+                        v_f0 = mid_f0[voiced]
+                        diffs = np.diff(v_f0)
+                        # Largest downward F0 jump = pitch reset at syllable boundary
+                        if diffs.min() < -15:   # at least 15 Hz drop
+                            boundary_t = float(v_t[np.argmin(diffs)])
+                except Exception:
+                    pass   # keep energy-based boundary on any error
         else:
             boundary_t = dur / 2
 
@@ -195,6 +223,11 @@ def extract_features_disyllabic(wav_bytes: bytes,
                                  preserve_times=False)
         snd2 = snd.extract_part(from_time=max(0, boundary_t - pad), to_time=dur,
                                  preserve_times=False)
+
+        # Trim voiceless onsets/offsets from each syllable so that the pitch
+        # contour is anchored at actual voicing (e.g. strips the 'h-' in 好).
+        snd1 = trim_silence(snd1)
+        snd2 = trim_silence(snd2)
 
         f1, c1 = extract_features_from_sound(snd1, feature_cols)
         f2, c2 = extract_features_from_sound(snd2, feature_cols)
@@ -219,6 +252,22 @@ def classify(features: dict, feature_cols: list,
     if predicted == 2:
         if features["f0_min_pos"] >= 0.40 and features["f0_min"] < -1.5:
             predicted = 3
+
+    # T1/T2 correction: compressed pitch range (common in disyllabic second syllables)
+    # If classified as T1 but pitch is consistently rising, likely a T2 with small range.
+    if predicted == 1:
+        pos_deltas = sum(1 for i in range(1, 10) if features.get(f"d0_{i:02d}", 0) > 0)
+        if features["f0_slope"] > 1.0 and pos_deltas >= 7 and features["f0_min_pos"] < 0.35:
+            predicted = 2
+
+    # T4/T2 correction: rise-then-fall artefact from syllable boundary placed too late.
+    # Genuine T4 starts HIGH (f0_01 > 0, minimum near end).
+    # A T2 whose snd1 window accidentally includes the falling onset of the next syllable
+    # looks like rise-then-fall → T4, but its first frame is LOW (f0_01 < 0) and
+    # the minimum is near the start (f0_min_pos < 0.35).
+    if predicted == 4:
+        if features["f0_min_pos"] < 0.35 and features["f0_01"] < -0.5:
+            predicted = 2
 
     # Confidence scores
     if hasattr(clf, "decision_function"):
@@ -298,19 +347,27 @@ def get_feedback(predicted: int, target: int) -> str:
 # ── Render results for one syllable ───────────────────────────────────────────
 def render_syllable_result(features, f0_contour, target_tone,
                             clf, scaler, feature_cols,
-                            reference_contours, label: str):
+                            reference_contours, label: str,
+                            accepted_tones: list = None):
     if target_tone == 5:
         st.info(f"**{label}:** Neutral tone — no pitch target to evaluate.")
         return
 
-    predicted, probs = classify(features, feature_cols, clf, scaler)
+    if accepted_tones is None:
+        accepted_tones = [target_tone]
 
-    fig = plot_contour(f0_contour, reference_contours[target_tone],
-                       predicted, target_tone, title=label)
+    predicted, probs = classify(features, feature_cols, clf, scaler)
+    correct = predicted in accepted_tones
+
+    # If predicted is an accepted alternate tone (e.g. T2 sandhi form of T3),
+    # compare the chart against that tone's reference so the overlay makes sense.
+    chart_target = predicted if (correct and predicted != target_tone) else target_tone
+
+    fig = plot_contour(f0_contour, reference_contours[chart_target],
+                       predicted, chart_target, title=label)
     st.pyplot(fig, use_container_width=True)
     plt.close(fig)
 
-    correct     = predicted == target_tone
     badge_color = "#4CAF50" if correct else "#F44336"
     st.markdown(
         f"<div style='text-align:center; margin:8px 0'>"
@@ -320,11 +377,35 @@ def render_syllable_result(features, f0_contour, target_tone,
         unsafe_allow_html=True
     )
 
-    feedback = get_feedback(predicted, target_tone)
-    if correct:
+    # Confidence bars (one per tone, T1–T4)
+    bars_html = "<div style='margin:10px 0 14px 0'>"
+    bars_html += "<div style='font-size:12px; color:#888; margin-bottom:5px'>Classifier confidence</div>"
+    for tone_num in [1, 2, 3, 4]:
+        pct      = float(probs[tone_num - 1]) * 100
+        color    = TONE_COLORS[tone_num]
+        bold     = "font-weight:bold" if tone_num == predicted else "font-weight:normal"
+        bars_html += (
+            f"<div style='display:flex; align-items:center; margin:3px 0'>"
+            f"<span style='width:115px; font-size:12px; {bold}'>{TONE_NAMES[tone_num]}</span>"
+            f"<div style='flex:1; background:#e0e0e0; border-radius:4px; height:13px; margin:0 6px'>"
+            f"<div style='width:{pct:.1f}%; background:{color}; border-radius:4px; height:13px'></div>"
+            f"</div>"
+            f"<span style='width:38px; text-align:right; font-size:12px; {bold}'>{pct:.1f}%</span>"
+            f"</div>"
+        )
+    bars_html += "</div>"
+    st.markdown(bars_html, unsafe_allow_html=True)
+
+    if correct and predicted != target_tone:
+        feedback = (f"✅ Correct! You used the sandhi form ({TONE_NAMES[predicted]}). "
+                    f"Both {TONE_NAMES[predicted]} and {TONE_NAMES[target_tone]} are accepted here.")
         st.success(feedback)
     else:
-        st.error(feedback)
+        feedback = get_feedback(predicted, target_tone)
+        if correct:
+            st.success(feedback)
+        else:
+            st.error(feedback)
 
 # ── Main app ───────────────────────────────────────────────────────────────────
 def main():
@@ -359,7 +440,7 @@ def main():
                          for w in word_pool]
     else:
         combo_filter = st.sidebar.selectbox(
-            "Filter by tone combination",
+            "Filter by first syllable tone",
             ["All", "T1", "T2", "T3", "T4", "Sandhi (T3+T3)"]
         )
         if combo_filter == "All":
@@ -531,9 +612,12 @@ def main():
                 scol1, scol2 = st.columns(2)
                 with scol1:
                     st.markdown(f"**Syllable 1: {syls[0]}**")
+                    # For T3+T3 sandhi words, accept T2 as correct for first syllable
+                    accepted_1 = [2, 3] if word.get("sandhi") and t1 == 3 else None
                     render_syllable_result(f1, c1, t1, clf, scaler,
                                            feature_cols, reference_contours,
-                                           f"Syllable 1: {syls[0]}")
+                                           f"Syllable 1: {syls[0]}",
+                                           accepted_tones=accepted_1)
                 with scol2:
                     st.markdown(f"**Syllable 2: {syls[1]}**")
                     render_syllable_result(f2, c2, t2, clf, scaler,
