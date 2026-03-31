@@ -13,6 +13,7 @@ Usage:
 import csv
 import json
 import random
+import uuid
 from datetime import datetime
 from pathlib import Path
 
@@ -81,15 +82,28 @@ def show_intro():
     )
     st.divider()
 
-    participant_id = st.text_input("Participant ID (e.g. P01)")
-    form_choice    = st.radio("Test form", ["Form A  (pre-test)", "Form B  (post-test)"],
-                               horizontal=True)
-    form_key       = "A" if form_choice.startswith("Form A") else "B"
+    form_choice = st.radio("Test form", ["Form A  (pre-test)", "Form B  (post-test)"],
+                            horizontal=True)
+    form_key    = "A" if form_choice.startswith("Form A") else "B"
 
-    if st.button("▶ Start test", disabled=not participant_id.strip(),
+    if form_key == "A":
+        # Auto-generate a unique ID for pre-test participants
+        if "auto_id" not in st.session_state:
+            st.session_state["auto_id"] = uuid.uuid4().hex[:8].upper()
+        participant_id = st.session_state["auto_id"]
+        st.success(f"Your participant ID: **{participant_id}**")
+        st.caption("📋 Write this down — you will need it when taking the post-test (Form B).")
+    else:
+        # Post-test: participant enters the ID they received during Form A
+        participant_id = st.text_input("Enter the participant ID you received in the pre-test (Form A)")
+        if not participant_id.strip():
+            st.warning("Please enter your Form A participant ID to continue.")
+
+    if st.button("▶ Start test",
+                 disabled=(form_key == "B" and not participant_id.strip()),
                  use_container_width=True, type="primary"):
         stimuli    = load_stimuli()
-        test_items = list(stimuli[form_key])          # copy so shuffle is safe
+        test_items = list(stimuli[form_key])
         rng        = random.Random(participant_id.strip())
         rng.shuffle(test_items)
 
