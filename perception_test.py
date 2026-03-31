@@ -88,30 +88,30 @@ def show_intro():
 
     if st.button("▶ Start test", disabled=not participant_id.strip(),
                  use_container_width=True, type="primary"):
-        stimuli   = load_stimuli()
-        items     = list(stimuli[form_key])          # copy so shuffle is safe
-        rng       = random.Random(participant_id.strip())
-        rng.shuffle(items)
+        stimuli    = load_stimuli()
+        test_items = list(stimuli[form_key])          # copy so shuffle is safe
+        rng        = random.Random(participant_id.strip())
+        rng.shuffle(test_items)
 
-        st.session_state.participant_id = participant_id.strip()
-        st.session_state.form           = form_key
-        st.session_state.items          = items
-        st.session_state.item_idx       = 0
-        st.session_state.phase          = "test"
+        st.session_state["participant_id"] = participant_id.strip()
+        st.session_state["form"]           = form_key
+        st.session_state["test_items"]     = test_items
+        st.session_state["test_idx"]       = 0
+        st.session_state["phase"]          = "test"
         st.rerun()
 
 
 def show_test():
     # Guard: if session state was lost (e.g. server restart), fall back to intro
-    if not st.session_state.get("items"):
-        st.session_state.phase = "intro"
+    if not st.session_state.get("test_items"):
+        st.session_state["phase"] = "intro"
         st.rerun()
         return
 
-    idx   = st.session_state.item_idx
-    items = st.session_state.items
-    total = len(items)
-    item  = items[idx]
+    test_items = st.session_state["test_items"]
+    idx        = st.session_state["test_idx"]
+    total      = len(test_items)
+    item       = test_items[idx]
 
     # Progress
     st.progress(idx / total, text=f"Item {idx + 1} of {total}")
@@ -133,12 +133,12 @@ def show_test():
     for i, (tone_num, label) in enumerate(TONE_LABELS.items()):
         if cols[i].button(label, key=f"btn_{tone_num}_{idx}",
                           use_container_width=True):
-            save_response(st.session_state.participant_id,
-                          st.session_state.form,
+            save_response(st.session_state["participant_id"],
+                          st.session_state["form"],
                           idx + 1, item, tone_num)
-            st.session_state.item_idx += 1
-            if st.session_state.item_idx >= total:
-                st.session_state.phase = "done"
+            st.session_state["test_idx"] += 1
+            if st.session_state["test_idx"] >= total:
+                st.session_state["phase"] = "done"
             st.rerun()
 
 
@@ -146,11 +146,11 @@ def show_done():
     st.success("✅ Test complete — thank you for participating!")
     st.markdown(
         f"Your responses have been recorded for participant "
-        f"**{st.session_state.participant_id}** (Form **{st.session_state.form}**)."
+        f"**{st.session_state['participant_id']}** (Form **{st.session_state['form']}**)."
     )
     st.balloons()
     if st.button("Start a new session"):
-        for key in ["participant_id", "form", "items", "item_idx", "phase"]:
+        for key in ["participant_id", "form", "test_items", "test_idx", "phase"]:
             st.session_state.pop(key, None)
         st.rerun()
 
@@ -162,11 +162,11 @@ def main():
     st.title("🎧 Mandarin Tone Perception Test")
 
     if "phase" not in st.session_state:
-        st.session_state.phase = "intro"
+        st.session_state["phase"] = "intro"
 
-    if st.session_state.phase == "intro":
+    if st.session_state["phase"] == "intro":
         show_intro()
-    elif st.session_state.phase == "test":
+    elif st.session_state["phase"] == "test":
         show_test()
     else:
         show_done()
