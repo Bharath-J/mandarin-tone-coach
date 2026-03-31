@@ -25,6 +25,9 @@ STIMULI_FILE  = PROJECT_DIR / "perception_test_stimuli.json"
 AUDIO_DIR     = PROJECT_DIR / "Data" / "perception_audio"
 RESULTS_DIR   = PROJECT_DIR / "results"
 
+# URL of this app on Streamlit Cloud (used to generate the Form B link)
+APP_URL = "https://mandarin-tone-test.streamlit.app"
+
 # ── Config ─────────────────────────────────────────────────────────────────────
 TONE_LABELS = {
     1: "Tone 1 — flat (ā)",
@@ -92,12 +95,17 @@ def show_intro():
             st.session_state["auto_id"] = uuid.uuid4().hex[:8].upper()
         participant_id = st.session_state["auto_id"]
         st.success(f"Your participant ID: **{participant_id}**")
-        st.caption("📋 Write this down — you will need it when taking the post-test (Form B).")
+        st.caption("Your ID will be transferred automatically when you start the post-test.")
     else:
-        # Post-test: participant enters the ID they received during Form A
-        participant_id = st.text_input("Enter the participant ID you received in the pre-test (Form A)")
-        if not participant_id.strip():
-            st.warning("Please enter your Form A participant ID to continue.")
+        # Post-test: try to read ID from URL query param (auto-transferred from Form A)
+        pid_from_url = st.query_params.get("pid", "")
+        if pid_from_url:
+            participant_id = pid_from_url
+            st.success(f"Participant ID transferred from pre-test: **{participant_id}**")
+        else:
+            participant_id = st.text_input("Enter your participant ID from the pre-test (Form A)")
+            if not participant_id.strip():
+                st.warning("Please enter your Form A participant ID to continue.")
 
     if st.button("▶ Start test",
                  disabled=(form_key == "B" and not participant_id.strip()),
@@ -163,8 +171,21 @@ def show_done():
         f"**{st.session_state['participant_id']}** (Form **{st.session_state['form']}**)."
     )
     st.balloons()
+
+    if st.session_state["form"] == "A":
+        pid  = st.session_state["participant_id"]
+        link = f"{APP_URL}/?pid={pid}"
+        st.divider()
+        st.markdown("### Next steps")
+        st.markdown(
+            "1. Use the **Mandarin Tone Coach** app to practice tones.\n"
+            "2. When you are done practising, click the button below to start the post-test."
+        )
+        st.link_button("▶ Go to post-test (Form B)", link, type="primary",
+                       use_container_width=True)
+
     if st.button("Start a new session"):
-        for key in ["participant_id", "form", "test_items", "test_idx", "phase"]:
+        for key in ["participant_id", "form", "test_items", "test_idx", "phase", "auto_id"]:
             st.session_state.pop(key, None)
         st.rerun()
 
