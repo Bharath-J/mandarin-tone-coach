@@ -102,6 +102,12 @@ def show_intro():
 
 
 def show_test():
+    # Guard: if session state was lost (e.g. server restart), fall back to intro
+    if not st.session_state.get("items"):
+        st.session_state.phase = "intro"
+        st.rerun()
+        return
+
     idx   = st.session_state.item_idx
     items = st.session_state.items
     total = len(items)
