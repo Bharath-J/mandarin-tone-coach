@@ -11,6 +11,10 @@ Data/data_aishell/
 Data/data_aishell.tgz
 Data/tone_dataset.csv
 Data/tone_perfect/
+Data/tone_perfect_all_mp3.zip
+
+# Evaluation session results (participant data — not for public repo)
+results/
 
 # Keep metadata and reference files
 !Data/tone_perfect_metadata.csv

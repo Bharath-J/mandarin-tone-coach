@@ -1,0 +1,286 @@
+{
+  "A": [
+    {
+      "syllable": "juē",
+      "tone": 1,
+      "speaker": "Female Voice 1",
+      "gender": "female",
+      "filename": "jue1_FV1_MP3.mp3"
+    },
+    {
+      "syllable": "xiā",
+      "tone": 1,
+      "speaker": "Female Voice 1",
+      "gender": "female",
+      "filename": "xia1_FV1_MP3.mp3"
+    },
+    {
+      "syllable": "sōu",
+      "tone": 1,
+      "speaker": "Male Voice 1",
+      "gender": "male",
+      "filename": "sou1_MV1_MP3.mp3"
+    },
+    {
+      "syllable": "mē",
+      "tone": 1,
+      "speaker": "Male Voice 1",
+      "gender": "male",
+      "filename": "me1_MV1_MP3.mp3"
+    },
+    {
+      "syllable": "xīn",
+      "tone": 1,
+      "speaker": "Female Voice 1",
+      "gender": "female",
+      "filename": "xin1_FV1_MP3.mp3"
+    },
+    {
+      "syllable": "wán",
+      "tone": 2,
+      "speaker": "Male Voice 1",
+      "gender": "male",
+      "filename": "wan2_MV1_MP3.mp3"
+    },
+    {
+      "syllable": "diá",
+      "tone": 2,
+      "speaker": "Female Voice 1",
+      "gender": "female",
+      "filename": "dia2_FV1_MP3.mp3"
+    },
+    {
+      "syllable": "sé",
+      "tone": 2,
+      "speaker": "Male Voice 1",
+      "gender": "male",
+      "filename": "se2_MV1_MP3.mp3"
+    },
+    {
+      "syllable": "wéng",
+      "tone": 2,
+      "speaker": "Female Voice 1",
+      "gender": "female",
+      "filename": "weng2_FV1_MP3.mp3"
+    },
+    {
+      "syllable": "nié",
+      "tone": 2,
+      "speaker": "Female Voice 1",
+      "gender": "female",
+      "filename": "nie2_FV1_MP3.mp3"
+    },
+    {
+      "syllable": "sěn",
+      "tone": 3,
+      "speaker": "Female Voice 1",
+      "gender": "female",
+      "filename": "sen3_FV1_MP3.mp3"
+    },
+    {
+      "syllable": "cǔn",
+      "tone": 3,
+      "speaker": "Male Voice 1",
+      "gender": "male",
+      "filename": "cun3_MV1_MP3.mp3"
+    },
+    {
+      "syllable": "nǎn",
+      "tone": 3,
+      "speaker": "Male Voice 1",
+      "gender": "male",
+      "filename": "nan3_MV1_MP3.mp3"
+    },
+    {
+      "syllable": "gǎng",
+      "tone": 3,
+      "speaker": "Female Voice 1",
+      "gender": "female",
+      "filename": "gang3_FV1_MP3.mp3"
+    },
+    {
+      "syllable": "gǎn",
+      "tone": 3,
+      "speaker": "Female Voice 1",
+      "gender": "female",
+      "filename": "gan3_FV1_MP3.mp3"
+    },
+    {
+      "syllable": "sòu",
+      "tone": 4,
+      "speaker": "Female Voice 1",
+      "gender": "female",
+      "filename": "sou4_FV1_MP3.mp3"
+    },
+    {
+      "syllable": "mèn",
+      "tone": 4,
+      "speaker": "Male Voice 1",
+      "gender": "male",
+      "filename": "men4_MV1_MP3.mp3"
+    },
+    {
+      "syllable": "zhù",
+      "tone": 4,
+      "speaker": "Male Voice 1",
+      "gender": "male",
+      "filename": "zhu4_MV1_MP3.mp3"
+    },
+    {
+      "syllable": "ào",
+      "tone": 4,
+      "speaker": "Female Voice 1",
+      "gender": "female",
+      "filename": "ao4_FV1_MP3.mp3"
+    },
+    {
+      "syllable": "sài",
+      "tone": 4,
+      "speaker": "Female Voice 1",
+      "gender": "female",
+      "filename": "sai4_FV1_MP3.mp3"
+    }
+  ],
+  "B": [
+    {
+      "syllable": "ruō",
+      "tone": 1,
+      "speaker": "Male Voice 2",
+      "gender": "male",
+      "filename": "ruo1_MV2_MP3.mp3"
+    },
+    {
+      "syllable": "zhōu",
+      "tone": 1,
+      "speaker": "Male Voice 2",
+      "gender": "male",
+      "filename": "zhou1_MV2_MP3.mp3"
+    },
+    {
+      "syllable": "chōu",
+      "tone": 1,
+      "speaker": "Female Voice 2",
+      "gender": "female",
+      "filename": "chou1_FV2_MP3.mp3"
+    },
+    {
+      "syllable": "sī",
+      "tone": 1,
+      "speaker": "Female Voice 2",
+      "gender": "female",
+      "filename": "si1_FV2_MP3.mp3"
+    },
+    {
+      "syllable": "dī",
+      "tone": 1,
+      "speaker": "Female Voice 2",
+      "gender": "female",
+      "filename": "di1_FV2_MP3.mp3"
+    },
+    {
+      "syllable": "sháng",
+      "tone": 2,
+      "speaker": "Male Voice 2",
+      "gender": "male",
+      "filename": "shang2_MV2_MP3.mp3"
+    },
+    {
+      "syllable": "zún",
+      "tone": 2,
+      "speaker": "Female Voice 2",
+      "gender": "female",
+      "filename": "zun2_FV2_MP3.mp3"
+    },
+    {
+      "syllable": "gáo",
+      "tone": 2,
+      "speaker": "Male Voice 2",
+      "gender": "male",
+      "filename": "gao2_MV2_MP3.mp3"
+    },
+    {
+      "syllable": "láng",
+      "tone": 2,
+      "speaker": "Female Voice 2",
+      "gender": "female",
+      "filename": "lang2_FV2_MP3.mp3"
+    },
+    {
+      "syllable": "cén",
+      "tone": 2,
+      "speaker": "Female Voice 2",
+      "gender": "female",
+      "filename": "cen2_FV2_MP3.mp3"
+    },
+    {
+      "syllable": "zhuǎng",
+      "tone": 3,
+      "speaker": "Female Voice 2",
+      "gender": "female",
+      "filename": "zhuang3_FV2_MP3.mp3"
+    },
+    {
+      "syllable": "cǔn",
+      "tone": 3,
+      "speaker": "Female Voice 2",
+      "gender": "female",
+      "filename": "cun3_FV2_MP3.mp3"
+    },
+    {
+      "syllable": "chuǒ",
+      "tone": 3,
+      "speaker": "Male Voice 2",
+      "gender": "male",
+      "filename": "chuo3_MV2_MP3.mp3"
+    },
+    {
+      "syllable": "mě",
+      "tone": 3,
+      "speaker": "Female Voice 2",
+      "gender": "female",
+      "filename": "me3_FV2_MP3.mp3"
+    },
+    {
+      "syllable": "hěng",
+      "tone": 3,
+      "speaker": "Male Voice 2",
+      "gender": "male",
+      "filename": "heng3_MV2_MP3.mp3"
+    },
+    {
+      "syllable": "gèng",
+      "tone": 4,
+      "speaker": "Male Voice 2",
+      "gender": "male",
+      "filename": "geng4_MV2_MP3.mp3"
+    },
+    {
+      "syllable": "bò",
+      "tone": 4,
+      "speaker": "Female Voice 2",
+      "gender": "female",
+      "filename": "bo4_FV2_MP3.mp3"
+    },
+    {
+      "syllable": "jìng",
+      "tone": 4,
+      "speaker": "Female Voice 2",
+      "gender": "female",
+      "filename": "jing4_FV2_MP3.mp3"
+    },
+    {
+      "syllable": "xùn",
+      "tone": 4,
+      "speaker": "Female Voice 2",
+      "gender": "female",
+      "filename": "xun4_FV2_MP3.mp3"
+    },
+    {
+      "syllable": "fò",
+      "tone": 4,
+      "speaker": "Male Voice 2",
+      "gender": "male",
+      "filename": "fo4_MV2_MP3.mp3"
+    }
+  ]
+}
