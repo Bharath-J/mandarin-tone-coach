@@ -72,7 +72,7 @@ def show_intro():
     st.markdown(
         "Listen to each audio clip and select the Mandarin tone you hear. "
         "**No feedback will be given during the test.** "
-        "There are **20 items** in total."
+        "There are **12 items** in total."
     )
     st.info(
         "**Tone reminder:**\n"

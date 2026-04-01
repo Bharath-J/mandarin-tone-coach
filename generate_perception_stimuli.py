@@ -1,10 +1,10 @@
 """
 generate_perception_stimuli.py
-Selects 20 stimuli per form (A/B) from the Tone Perfect corpus for the
+Selects 12 stimuli per form (A/B) from the Tone Perfect corpus for the
 pre/post perception test and saves them to perception_test_stimuli.json.
 
-Form A (pre-test):  Female Voice 1 (3 per tone) + Male Voice 1 (2 per tone)
-Form B (post-test): Female Voice 2 (3 per tone) + Male Voice 2 (2 per tone)
+Form A (pre-test):  Female Voice 1 (2 per tone) + Male Voice 1 (1 per tone)
+Form B (post-test): Female Voice 2 (2 per tone) + Male Voice 2 (1 per tone)
 
 Exclusion: syllables already present in word_list.json (practice words).
 Seed: fixed (42) for reproducibility.
@@ -24,8 +24,8 @@ WORD_LIST    = PROJECT_DIR / "word_list.json"
 OUTPUT       = PROJECT_DIR / "perception_test_stimuli.json"
 
 TONES        = [1, 2, 3, 4]
-N_FEMALE     = 3   # items per tone from female speaker
-N_MALE       = 2   # items per tone from male speaker
+N_FEMALE     = 2   # items per tone from female speaker
+N_MALE       = 1   # items per tone from male speaker
 SEED         = 42
 
 FORM_SPEAKERS = {
