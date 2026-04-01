@@ -3,7 +3,9 @@ perception_test.py
 Mandarin Tone Perception Test — Pre/Post Assessment
 CS6460 Educational Technology, Georgia Tech, 2026
 
-20 audio clips per session (5 per tone). No feedback given during the test.
+12 audio clips per session (3 per tone). No feedback given during the test.
+Participants navigate freely with Previous/Next, can change answers, and
+submit only when all 12 items are answered.
 Responses saved to results/perception_<participant_id>_<form>.csv
 
 Usage:
@@ -25,7 +27,6 @@ STIMULI_FILE  = PROJECT_DIR / "perception_test_stimuli.json"
 AUDIO_DIR     = PROJECT_DIR / "Data" / "perception_audio"
 RESULTS_DIR   = PROJECT_DIR / "results"
 
-
 # ── Config ─────────────────────────────────────────────────────────────────────
 TONE_LABELS = {
     1: "Tone 1 — flat (ā)",
@@ -41,30 +42,31 @@ def load_stimuli():
         return json.load(f)
 
 
-def save_response(participant_id: str, form: str, item_num: int,
-                  item: dict, response: int) -> None:
+def save_all_responses(participant_id: str, form: str,
+                        test_items: list, answers: dict) -> None:
     RESULTS_DIR.mkdir(exist_ok=True)
     out_file   = RESULTS_DIR / f"perception_{participant_id}_{form}.csv"
     fieldnames = ["participant_id", "form", "item_num", "syllable",
                   "speaker", "gender", "target_tone", "response",
                   "correct", "timestamp"]
-    write_header = not out_file.exists()
-    with open(out_file, "a", newline="", encoding="utf-8") as f:
+    timestamp  = datetime.now().isoformat()
+    with open(out_file, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
-        if write_header:
-            writer.writeheader()
-        writer.writerow({
-            "participant_id": participant_id,
-            "form":           form,
-            "item_num":       item_num,
-            "syllable":       item["syllable"],
-            "speaker":        item["speaker"],
-            "gender":         item["gender"],
-            "target_tone":    item["tone"],
-            "response":       response,
-            "correct":        int(response == item["tone"]),
-            "timestamp":      datetime.now().isoformat(),
-        })
+        writer.writeheader()
+        for i, item in enumerate(test_items):
+            response = answers.get(i)
+            writer.writerow({
+                "participant_id": participant_id,
+                "form":           form,
+                "item_num":       i + 1,
+                "syllable":       item["syllable"],
+                "speaker":        item["speaker"],
+                "gender":         item["gender"],
+                "target_tone":    item["tone"],
+                "response":       response,
+                "correct":        int(response == item["tone"]) if response else 0,
+                "timestamp":      timestamp,
+            })
 
 
 # ── Screens ────────────────────────────────────────────────────────────────────
@@ -72,7 +74,7 @@ def show_intro():
     st.markdown(
         "Listen to each audio clip and select the Mandarin tone you hear. "
         "**No feedback will be given during the test.** "
-        "There are **12 items** in total."
+        "There are **12 items** in total. You can go back and change answers before submitting."
     )
     st.info(
         "**Tone reminder:**\n"
@@ -88,12 +90,10 @@ def show_intro():
     form_key    = "A" if form_choice.startswith("Form A") else "B"
 
     if form_key == "A":
-        # Auto-generate a unique ID for pre-test participants
         if "auto_id" not in st.session_state:
             st.session_state["auto_id"] = uuid.uuid4().hex[:8].upper()
         participant_id = st.session_state["auto_id"]
     else:
-        # Post-test: participant enters the ID they received at the end of Form A
         participant_id = st.text_input("Enter your participant ID from the pre-test (Form A)")
         if not participant_id.strip():
             st.warning("Please enter your Form A participant ID to continue.")
@@ -110,24 +110,27 @@ def show_intro():
         st.session_state["form"]           = form_key
         st.session_state["test_items"]     = test_items
         st.session_state["test_idx"]       = 0
+        st.session_state["answers"]        = {}
         st.session_state["phase"]          = "test"
         st.rerun()
 
 
 def show_test():
-    # Guard: if session state was lost (e.g. server restart), fall back to intro
     if not st.session_state.get("test_items"):
         st.session_state["phase"] = "intro"
         st.rerun()
         return
 
     test_items = st.session_state["test_items"]
+    answers    = st.session_state["answers"]
     idx        = st.session_state["test_idx"]
     total      = len(test_items)
     item       = test_items[idx]
+    answered   = len(answers)
 
-    # Progress
-    st.progress(idx / total, text=f"Item {idx + 1} of {total}")
+    # Progress bar — tracks answers, not position
+    st.progress(answered / total,
+                text=f"{answered} of {total} answered  •  Item {idx + 1} of {total}")
     st.divider()
 
     # Audio
@@ -142,17 +145,55 @@ def show_test():
 
     st.markdown("#### Which tone did you hear?")
 
+    # Tone buttons — highlight current selection
+    current = answers.get(idx)
     cols = st.columns(4)
     for i, (tone_num, label) in enumerate(TONE_LABELS.items()):
+        btn_type = "primary" if current == tone_num else "secondary"
         if cols[i].button(label, key=f"btn_{tone_num}_{idx}",
-                          use_container_width=True):
-            save_response(st.session_state["participant_id"],
-                          st.session_state["form"],
-                          idx + 1, item, tone_num)
-            st.session_state["test_idx"] += 1
-            if st.session_state["test_idx"] >= total:
-                st.session_state["phase"] = "done"
+                          use_container_width=True, type=btn_type):
+            st.session_state["answers"][idx] = tone_num
+            # Auto-advance to next unanswered item if available
+            next_unanswered = next(
+                (j for j in range(idx + 1, total) if j not in st.session_state["answers"]),
+                None
+            )
+            if next_unanswered is not None:
+                st.session_state["test_idx"] = next_unanswered
             st.rerun()
+
+    st.divider()
+
+    # Navigation
+    nav_left, nav_mid, nav_right = st.columns([1, 2, 1])
+
+    with nav_left:
+        if st.button("← Previous", disabled=(idx == 0), use_container_width=True):
+            st.session_state["test_idx"] -= 1
+            st.rerun()
+
+    with nav_mid:
+        # Show unanswered item numbers as a hint
+        unanswered = [j + 1 for j in range(total) if j not in answers]
+        if unanswered:
+            st.caption(f"Not yet answered: {unanswered}")
+
+    with nav_right:
+        if idx < total - 1:
+            if st.button("Next →", use_container_width=True):
+                st.session_state["test_idx"] += 1
+                st.rerun()
+        else:
+            all_done = answered == total
+            if st.button("Submit ✓", disabled=not all_done,
+                         use_container_width=True, type="primary"):
+                save_all_responses(st.session_state["participant_id"],
+                                   st.session_state["form"],
+                                   test_items, answers)
+                st.session_state["phase"] = "done"
+                st.rerun()
+            if not all_done:
+                st.caption("Answer all items to submit.")
 
 
 def show_done():
@@ -177,7 +218,8 @@ def show_done():
         )
 
     if st.button("Start a new session"):
-        for key in ["participant_id", "form", "test_items", "test_idx", "phase", "auto_id"]:
+        for key in ["participant_id", "form", "test_items", "test_idx",
+                    "answers", "phase", "auto_id"]:
             st.session_state.pop(key, None)
         st.rerun()
 
