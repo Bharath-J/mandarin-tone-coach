@@ -145,13 +145,13 @@ def show_test():
 
     st.markdown("#### Which tone did you hear?")
 
-    # Tone buttons — highlight current selection
+    # Tone buttons — highlight current selection via label prefix
     current = answers.get(idx)
     cols = st.columns(4)
     for i, (tone_num, label) in enumerate(TONE_LABELS.items()):
-        btn_type = "primary" if current == tone_num else "secondary"
-        if cols[i].button(label, key=f"btn_{tone_num}_{idx}",
-                          use_container_width=True, type=btn_type):
+        btn_label = f"✓ {label}" if current == tone_num else label
+        if cols[i].button(btn_label, key=f"btn_{tone_num}_{idx}",
+                          use_container_width=True, type="secondary"):
             st.session_state["answers"][idx] = tone_num
             # Auto-advance to next unanswered item if available
             next_unanswered = next(
