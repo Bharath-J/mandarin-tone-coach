@@ -20,12 +20,18 @@ from datetime import datetime
 from pathlib import Path
 
 import streamlit as st
+import gspread
+from google.oauth2.service_account import Credentials
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 PROJECT_DIR   = Path(__file__).parent
 STIMULI_FILE  = PROJECT_DIR / "perception_test_stimuli.json"
 AUDIO_DIR     = PROJECT_DIR / "Data" / "perception_audio"
 RESULTS_DIR   = PROJECT_DIR / "results"
+
+SHEET_ID = "1Tsmcof8GaDHV11roUZrxXGYk7yk43cJHhosnzdocvbs"
+SCOPES   = ["https://www.googleapis.com/auth/spreadsheets",
+             "https://www.googleapis.com/auth/drive"]
 
 # ── Config ─────────────────────────────────────────────────────────────────────
 TONE_LABELS = {
@@ -42,31 +48,65 @@ def load_stimuli():
         return json.load(f)
 
 
+def _get_sheet():
+    """Return the first worksheet of the results Google Sheet."""
+    creds = Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"], scopes=SCOPES
+    )
+    client = gspread.authorize(creds)
+    return client.open_by_key(SHEET_ID).sheet1
+
+
+def _ensure_header(ws) -> None:
+    """Add header row if the sheet is empty."""
+    if ws.row_count == 0 or not ws.row_values(1):
+        ws.append_row(
+            ["participant_id", "form", "item_num", "syllable",
+             "speaker", "gender", "target_tone", "response",
+             "correct", "timestamp"],
+            value_input_option="RAW"
+        )
+
+
 def save_all_responses(participant_id: str, form: str,
                         test_items: list, answers: dict) -> None:
+    timestamp = datetime.now().isoformat()
+    rows = []
+    for i, item in enumerate(test_items):
+        response = answers.get(i)
+        rows.append([
+            participant_id,
+            form,
+            i + 1,
+            item["syllable"],
+            item["speaker"],
+            item["gender"],
+            item["tone"],
+            response,
+            int(response == item["tone"]) if response else 0,
+            timestamp,
+        ])
+
+    # ── Primary: Google Sheets ──────────────────────────────────────────────
+    try:
+        ws = _get_sheet()
+        _ensure_header(ws)
+        ws.append_rows(rows, value_input_option="RAW")
+        return
+    except Exception as e:
+        st.warning(f"Could not write to Google Sheets ({e}). Saving locally instead.")
+
+    # ── Fallback: local CSV ─────────────────────────────────────────────────
     RESULTS_DIR.mkdir(exist_ok=True)
     out_file   = RESULTS_DIR / f"perception_{participant_id}_{form}.csv"
     fieldnames = ["participant_id", "form", "item_num", "syllable",
                   "speaker", "gender", "target_tone", "response",
                   "correct", "timestamp"]
-    timestamp  = datetime.now().isoformat()
     with open(out_file, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        for i, item in enumerate(test_items):
-            response = answers.get(i)
-            writer.writerow({
-                "participant_id": participant_id,
-                "form":           form,
-                "item_num":       i + 1,
-                "syllable":       item["syllable"],
-                "speaker":        item["speaker"],
-                "gender":         item["gender"],
-                "target_tone":    item["tone"],
-                "response":       response,
-                "correct":        int(response == item["tone"]) if response else 0,
-                "timestamp":      timestamp,
-            })
+        for row in rows:
+            writer.writerow(dict(zip(fieldnames, row)))
 
 
 # ── Screens ────────────────────────────────────────────────────────────────────
@@ -187,9 +227,11 @@ def show_test():
             all_done = answered == total
             if st.button("Submit ✓", disabled=not all_done,
                          use_container_width=True, type="primary"):
-                save_all_responses(st.session_state["participant_id"],
-                                   st.session_state["form"],
-                                   test_items, answers)
+                if not st.session_state.get("saved"):
+                    st.session_state["saved"] = True
+                    save_all_responses(st.session_state["participant_id"],
+                                       st.session_state["form"],
+                                       test_items, answers)
                 st.session_state["phase"] = "done"
                 st.rerun()
             if not all_done:
@@ -219,7 +261,7 @@ def show_done():
 
     if st.button("Start a new session"):
         for key in ["participant_id", "form", "test_items", "test_idx",
-                    "answers", "phase", "auto_id"]:
+                    "answers", "phase", "auto_id", "saved"]:
             st.session_state.pop(key, None)
         st.rerun()
 

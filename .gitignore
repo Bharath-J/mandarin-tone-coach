@@ -23,6 +23,9 @@ results/
 # Keep reference contours (small .npz files)
 !Data/reference_contours/
 
+# Streamlit secrets (never commit)
+.streamlit/secrets.toml
+
 # macOS
 .DS_Store
 
