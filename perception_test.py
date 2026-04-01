@@ -166,11 +166,10 @@ def show_test():
     idx        = st.session_state["test_idx"]
     total      = len(test_items)
     item       = test_items[idx]
-    answered   = len(answers)
 
-    # Progress bar — tracks answers, not position
-    st.progress(answered / total,
-                text=f"{answered} of {total} answered  •  Item {idx + 1} of {total}")
+    # Question counter
+    st.markdown(f"### Question {idx + 1} of {total}")
+    st.progress((idx + 1) / total)
     st.divider()
 
     # Audio
@@ -185,57 +184,28 @@ def show_test():
 
     st.markdown("#### Which tone did you hear?")
 
-    # Tone buttons — highlight current selection via label prefix
-    current = answers.get(idx)
+    # Tone buttons — auto-advance on selection
     cols = st.columns(4)
     for i, (tone_num, label) in enumerate(TONE_LABELS.items()):
-        btn_label = f"✓ {label}" if current == tone_num else label
-        if cols[i].button(btn_label, key=f"btn_{tone_num}_{idx}",
+        if cols[i].button(label, key=f"btn_{tone_num}_{idx}",
                           use_container_width=True, type="secondary"):
             st.session_state["answers"][idx] = tone_num
-            # Auto-advance to next unanswered item if available
-            next_unanswered = next(
-                (j for j in range(idx + 1, total) if j not in st.session_state["answers"]),
-                None
-            )
-            if next_unanswered is not None:
-                st.session_state["test_idx"] = next_unanswered
+            if idx < total - 1:
+                st.session_state["test_idx"] = idx + 1
             st.rerun()
 
     st.divider()
 
-    # Navigation
-    nav_left, nav_mid, nav_right = st.columns([1, 2, 1])
-
-    with nav_left:
-        if st.button("← Previous", disabled=(idx == 0), use_container_width=True):
-            st.session_state["test_idx"] -= 1
+    # Submit on last question (only shown after answering it)
+    if idx == total - 1 and idx in answers:
+        if st.button("Submit ✓", use_container_width=True, type="primary"):
+            if not st.session_state.get("saved"):
+                st.session_state["saved"] = True
+                save_all_responses(st.session_state["participant_id"],
+                                   st.session_state["form"],
+                                   test_items, answers)
+            st.session_state["phase"] = "done"
             st.rerun()
-
-    with nav_mid:
-        # Show unanswered item numbers as a hint
-        unanswered = [j + 1 for j in range(total) if j not in answers]
-        if unanswered:
-            st.caption(f"Not yet answered: {unanswered}")
-
-    with nav_right:
-        if idx < total - 1:
-            if st.button("Next →", use_container_width=True):
-                st.session_state["test_idx"] += 1
-                st.rerun()
-        else:
-            all_done = answered == total
-            if st.button("Submit ✓", disabled=not all_done,
-                         use_container_width=True, type="primary"):
-                if not st.session_state.get("saved"):
-                    st.session_state["saved"] = True
-                    save_all_responses(st.session_state["participant_id"],
-                                       st.session_state["form"],
-                                       test_items, answers)
-                st.session_state["phase"] = "done"
-                st.rerun()
-            if not all_done:
-                st.caption("Answer all items to submit.")
 
 
 def show_done():
