@@ -163,49 +163,47 @@ def show_test():
 
     test_items = st.session_state["test_items"]
     answers    = st.session_state["answers"]
-    idx        = st.session_state["test_idx"]
     total      = len(test_items)
-    item       = test_items[idx]
+    answered   = len(answers)
 
-    # Question counter
-    st.markdown(f"### Question {idx + 1} of {total}")
-    st.progress((idx + 1) / total)
-    st.divider()
+    st.progress(answered / total,
+                text=f"{answered} of {total} answered")
 
-    # Audio
-    audio_path = AUDIO_DIR / item["filename"]
-    if audio_path.exists():
-        st.markdown("#### 🎧 Listen to the audio clip")
-        with open(audio_path, "rb") as f:
-            st.audio(f.read(), format="audio/mp3")
-    else:
-        st.error(f"Audio file not found: {audio_path.name}")
-        st.stop()
+    for idx, item in enumerate(test_items):
+        st.divider()
+        current    = answers.get(idx)
+        status     = "✅" if current is not None else "⬜"
+        st.markdown(f"**{status} Clip {idx + 1}**")
 
-    st.markdown("#### Which tone did you hear?")
+        audio_path = AUDIO_DIR / item["filename"]
+        if audio_path.exists():
+            with open(audio_path, "rb") as f:
+                st.audio(f.read(), format="audio/mp3")
+        else:
+            st.error(f"Audio file not found: {audio_path.name}")
+            st.stop()
 
-    # Tone buttons — auto-advance on selection
-    cols = st.columns(4)
-    for i, (tone_num, label) in enumerate(TONE_LABELS.items()):
-        if cols[i].button(label, key=f"btn_{tone_num}_{idx}",
-                          use_container_width=True, type="secondary"):
-            st.session_state["answers"][idx] = tone_num
-            if idx < total - 1:
-                st.session_state["test_idx"] = idx + 1
-            st.rerun()
+        cols = st.columns(4)
+        for i, (tone_num, label) in enumerate(TONE_LABELS.items()):
+            btn_label = f"✓ {label}" if current == tone_num else label
+            if cols[i].button(btn_label, key=f"btn_{tone_num}_{idx}",
+                              use_container_width=True, type="secondary"):
+                st.session_state["answers"][idx] = tone_num
+                st.rerun()
 
     st.divider()
-
-    # Submit on last question (only shown after answering it)
-    if idx == total - 1 and idx in answers:
-        if st.button("Submit ✓", use_container_width=True, type="primary"):
-            if not st.session_state.get("saved"):
-                st.session_state["saved"] = True
-                save_all_responses(st.session_state["participant_id"],
-                                   st.session_state["form"],
-                                   test_items, answers)
-            st.session_state["phase"] = "done"
-            st.rerun()
+    all_done = answered == total
+    if not all_done:
+        st.caption(f"Please answer all {total} clips before submitting.")
+    if st.button("Submit ✓", disabled=not all_done,
+                 use_container_width=True, type="primary"):
+        if not st.session_state.get("saved"):
+            st.session_state["saved"] = True
+            save_all_responses(st.session_state["participant_id"],
+                               st.session_state["form"],
+                               test_items, answers)
+        st.session_state["phase"] = "done"
+        st.rerun()
 
 
 def show_done():
