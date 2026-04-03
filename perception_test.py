@@ -229,12 +229,6 @@ def show_done():
         st.markdown("### ⚠️ Save your participant ID before continuing")
         st.markdown("You will need this ID when you take the post-test (Form B):")
         st.code(pid, language=None)
-        st.markdown(
-            "**Next steps:**\n"
-            "1. Copy the ID above.\n"
-            "2. Use the **Mandarin Tone Coach** practice app.\n"
-            "3. Open the post-test (Form B) link and paste your ID when asked."
-        )
 
     if st.button("Start a new session"):
         for key in ["participant_id", "form", "test_items", "test_idx",
