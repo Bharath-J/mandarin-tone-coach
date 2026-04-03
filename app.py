@@ -418,7 +418,7 @@ def render_syllable_result(features, f0_contour, target_tone,
 # ── Main app ───────────────────────────────────────────────────────────────────
 def main():
     st.set_page_config(page_title="Mandarin Tone Coach", page_icon="🎵",
-                       layout="centered")
+                       layout="wide")
 
     st.markdown(
         "<style>#MainMenu{visibility:hidden}header{visibility:hidden}</style>",
