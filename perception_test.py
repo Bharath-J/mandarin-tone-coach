@@ -125,9 +125,18 @@ def show_intro():
     )
     st.divider()
 
-    form_choice = st.radio("Test form", ["Form A  (pre-test)", "Form B  (post-test)"],
-                            horizontal=True)
-    form_key    = "A" if form_choice.startswith("Form A") else "B"
+    # Determine form from URL query parameter (?form=A or ?form=B).
+    # When locked by the URL the radio is hidden so participants cannot switch forms.
+    url_form = st.query_params.get("form", "").upper()
+    if url_form in ("A", "B"):
+        form_key = url_form
+        label    = "Pre-test (Form A)" if form_key == "A" else "Post-test (Form B)"
+        st.markdown(f"**{label}**")
+    else:
+        # Fallback for direct access without a query parameter
+        form_choice = st.radio("Test form", ["Form A  (pre-test)", "Form B  (post-test)"],
+                                horizontal=True)
+        form_key    = "A" if form_choice.startswith("Form A") else "B"
 
     if form_key == "A":
         if "auto_id" not in st.session_state:
