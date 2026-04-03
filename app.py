@@ -148,11 +148,15 @@ def extract_features(wav_bytes: bytes,
         return None, None
 
 def extract_features_disyllabic(wav_bytes: bytes,
-                                  feature_cols: list) -> tuple | None:
+                                  feature_cols: list,
+                                  tones: list = None) -> tuple | None:
     """
     Split a disyllabic recording into two halves using energy-based
     syllable boundary detection, then extract features from each half.
     Returns (features1, f0_norm1, features2, f0_norm2) or None on failure.
+    tones: list of two tone numbers (e.g. [3, 5]) — used to widen the
+           boundary search window when the second syllable is neutral tone,
+           which is short and sits late in the recording.
     """
     try:
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
@@ -179,9 +183,13 @@ def extract_features_disyllabic(wav_bytes: bytes,
             window = samples[i:i + win_size]
             energies.append((i / sr, float(np.sqrt(np.mean(window ** 2)))))
 
-        # Look for energy minimum in middle 40% of recording
-        mid_start = dur * 0.30
-        mid_end   = dur * 0.70
+        # When the second syllable is neutral tone (e.g. wǒmen, péngyou) it is
+        # short and unstressed, so the syllable boundary sits late in the
+        # recording — often at 70-80% of duration, outside the default 30-70%
+        # window.  Widen the upper bound to 85% for these words.
+        second_is_neutral = (tones is not None and len(tones) == 2 and tones[1] == 5)
+        mid_start = dur * 0.25
+        mid_end   = dur * 0.85 if second_is_neutral else dur * 0.70
         mid_energies = [(t, e) for t, e in energies if mid_start <= t <= mid_end]
 
         if mid_energies:
@@ -422,9 +430,25 @@ def main():
     # ── Sidebar ────────────────────────────────────────────────────────────────
     st.sidebar.header("Practice Settings")
 
+    with st.sidebar.expander("What are Mandarin tones?"):
+        st.markdown(
+            "Mandarin is a **tonal language** — the pitch of your voice changes the meaning "
+            "of a word. There are 4 main tones:\n\n"
+            "- **Tone 1 (flat)** — High and steady pitch, like holding a musical note.\n"
+            "- **Tone 2 (rising)** — Pitch rises, like the end of an English question.\n"
+            "- **Tone 3 (dipping)** — Pitch dips down then rises back up.\n"
+            "- **Tone 4 (falling)** — Pitch falls sharply from high to low.\n\n"
+            "The **Reference Shape** shown for each word is a guide to the pitch curve you "
+            "should aim for. Record yourself and compare your curve to the reference."
+        )
+
     mode = st.sidebar.radio("Word type", ["Monosyllabic", "Disyllabic"])
 
     if mode == "Monosyllabic":
+        st.sidebar.caption(
+            "Filter by tone to focus your practice. "
+            "Not sure which tone to pick? Start with **All tones**."
+        )
         tone_filter = st.sidebar.selectbox(
             "Filter by tone",
             ["All tones", "Tone 1 (flat)", "Tone 2 (rising)",
@@ -488,6 +512,7 @@ def main():
             audio_bytes = audio_recorder(
                 text="", recording_color="#F44336", neutral_color="#2196F3",
                 icon_size="3x", pause_threshold=3.0,
+                key=f"mono_{word['pinyin']}_{word_tone}",
             )
             st.caption("💡 Quiet room · speak clearly · sustain the vowel 0.5s")
 
@@ -527,8 +552,6 @@ def main():
                 render_syllable_result(features, f0_contour, word_tone,
                                        clf, scaler, feature_cols,
                                        reference_contours, "Your recording")
-                st.divider()
-                st.markdown("### 💬 Feedback")
 
     else:
         # ── Disyllabic mode ────────────────────────────────────────────────────
@@ -563,6 +586,7 @@ def main():
             audio_bytes = audio_recorder(
                 text="", recording_color="#F44336", neutral_color="#2196F3",
                 icon_size="3x", pause_threshold=3.0,
+                key=f"di_{word['pinyin']}",
             )
             st.caption("💡 Say the word naturally without pausing between syllables")
 
@@ -600,7 +624,7 @@ def main():
         if audio_bytes:
             st.audio(audio_bytes, format="audio/wav")
             with st.spinner("Analysing both syllables..."):
-                result = extract_features_disyllabic(audio_bytes, feature_cols)
+                result = extract_features_disyllabic(audio_bytes, feature_cols, tones=tones)
 
             if result is None:
                 st.warning("⚠️ Could not analyse the recording. Speak clearly and say both syllables together.")

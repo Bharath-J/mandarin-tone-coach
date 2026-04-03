@@ -9,7 +9,7 @@
   {"pinyin": "péngyou",  "tones": [2,5], "syllables": ["péng","you"],    "character": "朋友", "meaning": "friend",        "tone_combo": "T2+neutral", "sandhi": false},
   {"pinyin": "lǎoshī",   "tones": [3,1], "syllables": ["lǎo","shī"],     "character": "老师", "meaning": "teacher",       "tone_combo": "T3+T1", "sandhi": false},
   {"pinyin": "měilì",    "tones": [3,4], "syllables": ["měi","lì"],      "character": "美丽", "meaning": "beautiful",     "tone_combo": "T3+T4", "sandhi": false},
-  {"pinyin": "shàngkē",  "tones": [4,1], "syllables": ["shàng","kē"],    "character": "上课", "meaning": "go to class",   "tone_combo": "T4+T1", "sandhi": false},
+  {"pinyin": "shàngkè",  "tones": [4,4], "syllables": ["shàng","kè"],    "character": "上课", "meaning": "go to class",   "tone_combo": "T4+T4", "sandhi": false},
   {"pinyin": "diànhuà",  "tones": [4,4], "syllables": ["diàn","huà"],    "character": "电话", "meaning": "telephone",     "tone_combo": "T4+T4", "sandhi": false},
   {"pinyin": "dàxué",    "tones": [4,2], "syllables": ["dà","xué"],      "character": "大学", "meaning": "university",    "tone_combo": "T4+T2", "sandhi": false},
   {"pinyin": "rìběn",    "tones": [4,3], "syllables": ["rì","běn"],      "character": "日本", "meaning": "Japan",         "tone_combo": "T4+T3", "sandhi": false},
