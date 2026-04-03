@@ -230,11 +230,6 @@ def show_done():
         st.markdown("You will need this ID when you take the post-test (Form B):")
         st.code(pid, language=None)
 
-    if st.button("Start a new session"):
-        for key in ["participant_id", "form", "test_items", "test_idx",
-                    "answers", "phase", "auto_id", "saved"]:
-            st.session_state.pop(key, None)
-        st.rerun()
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────
