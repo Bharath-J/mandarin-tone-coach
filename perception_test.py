@@ -236,6 +236,12 @@ def show_done():
 def main():
     st.set_page_config(page_title="Tone Perception Test", page_icon="🎧",
                        layout="centered")
+
+    st.markdown(
+        "<style>#MainMenu{visibility:hidden}header{visibility:hidden}</style>",
+        unsafe_allow_html=True,
+    )
+
     st.title("🎧 Mandarin Tone Perception Test")
 
     if "phase" not in st.session_state:

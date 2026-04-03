@@ -420,6 +420,11 @@ def main():
     st.set_page_config(page_title="Mandarin Tone Coach", page_icon="🎵",
                        layout="centered")
 
+    st.markdown(
+        "<style>#MainMenu{visibility:hidden}header{visibility:hidden}</style>",
+        unsafe_allow_html=True,
+    )
+
     st.title("🎵 Mandarin Tone Coach")
     st.markdown("Practice Mandarin tones with instant pitch feedback.")
 
