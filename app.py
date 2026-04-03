@@ -654,7 +654,10 @@ def main():
 
     # ── Footer ─────────────────────────────────────────────────────────────────
     st.markdown(
-        "<div style='text-align:center; color:#aaa; font-size:12px'>"
+        "<style>.app-footer{position:fixed;bottom:0;left:0;width:100%;"
+        "text-align:center;color:#aaa;font-size:12px;padding:8px 0;"
+        "background:var(--background-color)}</style>"
+        "<div class='app-footer'>"
         "Mandarin Tone Coach · CS6460 EdTech · Georgia Tech · 2026"
         "</div>",
         unsafe_allow_html=True
