@@ -575,12 +575,13 @@ def main():
             st.markdown(f"<div style='font-size:14px; text-align:center; color:#888'>{word['meaning']}</div>",
                         unsafe_allow_html=True)
             st.markdown(
-                f"<div style='margin-top:8px; text-align:center'>"
+                f"<div style='margin-top:8px; display:flex; flex-wrap:wrap; "
+                f"justify-content:center; gap:4px'>"
                 f"<span style='background:{TONE_COLORS[t1]}; color:white; "
-                f"padding:3px 10px; border-radius:10px; font-size:12px; margin-right:4px'>"
+                f"padding:3px 10px; border-radius:10px; font-size:12px; white-space:nowrap'>"
                 f"{syls[0]} · {TONE_NAMES[t1]}</span>"
                 f"<span style='background:{TONE_COLORS[t2]}; color:white; "
-                f"padding:3px 10px; border-radius:10px; font-size:12px'>"
+                f"padding:3px 10px; border-radius:10px; font-size:12px; white-space:nowrap'>"
                 f"{syls[1]} · {TONE_NAMES[t2]}</span></div>",
                 unsafe_allow_html=True
             )
