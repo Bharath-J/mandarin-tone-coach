@@ -540,9 +540,8 @@ def main():
             st.pyplot(fig_ref, use_container_width=True)
             plt.close(fig_ref)
 
-        st.divider()
-
         if audio_bytes:
+            st.divider()
             st.audio(audio_bytes, format="audio/wav")
             with st.spinner("Analysing..."):
                 features, f0_contour = extract_features(audio_bytes, feature_cols)
@@ -625,9 +624,8 @@ def main():
                 "and T2+T3 (sandhi form) are accepted here."
             )
 
-        st.divider()
-
         if audio_bytes:
+            st.divider()
             st.audio(audio_bytes, format="audio/wav")
             with st.spinner("Analysing both syllables..."):
                 result = extract_features_disyllabic(audio_bytes, feature_cols, tones=tones)
@@ -655,7 +653,6 @@ def main():
                                            f"Syllable 2: {syls[1]}")
 
     # ── Footer ─────────────────────────────────────────────────────────────────
-    st.divider()
     st.markdown(
         "<div style='text-align:center; color:#aaa; font-size:12px'>"
         "Mandarin Tone Coach · CS6460 EdTech · Georgia Tech · 2026"
