@@ -1,0 +1,266 @@
+Step 1: Please complete the pre-training perception test using the link below. It contains 12 short audio clips — select the Mandarin tone you hear for each one. The test takes about 2-3 minutes.
+1. I have completed bith the pre test and post test. For some of the audio clips it was confusing to differentiate between rising tone and dipping tone.
+2.
+3. done
+4. C095F1AC
+5.
+6. done
+7. 744A106A
+8.
+9. Done
+10.
+11. done - 8E887CE3
+12. C8E77588
+13.
+14. FF05BA9B
+15.
+16.
+17. Done
+18.
+Step 2: Please use the Mandarin Tone Coach app to practice Mandarin tones. Spend at least 5–10 minutes practicing. Try both monosyllabic and disyllabic words.
+1. Here are my feedback pointers : 1. When I navigate to link, I'm seeing the drop down for Filter by Tone, the option for All Tones is bit confusing as for a person who does not know Mandarin language, I wouldnt know the correct tone. But the reference shape tries to provide you the hint. Can we add something on UI to give more guided experience? 2. I encountered usability issue, when I practised few monosyllabic words and then chose the disyllabic option and when I choose a word, its already displaying the results even without me practising it. The same issue occurs even when I toggle within multiple filter options for given word type. This needs a fix.3. Below the results there is Feedback text but there is no text area to provide feedback, this is another usability issue which is confusing. What is the purpose of Feedback?
+2.
+3. done
+4. ok
+5.
+6. done
+7.
+8.
+9. Done
+10.
+11. done
+12.
+13.
+14.
+15.
+16.
+17. Done
+18.
+Step 3: Please complete the post-training perception test. Select Form B (post-test) and enter the Participant ID you received at the end of Form A.
+1. 0252079A
+2.
+3. done
+4. C095F1AC
+5.
+6. done
+7.
+8.
+9. Done
+10.
+11. 8E887CE3
+12. C8E77588
+13.
+14.
+15.
+16.
+17. Done
+18.
+What is your native language?
+1. Kannada
+2. Kannada
+3. Hindi
+4. mandarin
+5. English
+6. Mandarin
+7. Farsi
+8. ENGLISH
+9. Tulu / Kannada
+10. American english
+11. Malayalam
+12. English
+13. English/Chinese
+14. English
+15. English
+16. English
+17. Swahili
+18. English
+How long have you been studying Mandarin?
+1. Never studied before this session
+2. Never studied before this session
+3. Never studied before this session
+4. More than 2 years
+5. 6 months – 2 years
+6. More than 2 years
+7. Never studied before this session
+8. Never studied before this session
+9. Never studied before this session
+10. Never studied before this session
+11. Never studied before this session
+12. Less than 6 months
+13. More than 2 years
+14. Never studied before this session
+15. Never studied before this session
+16. Never studied before this session
+17. Never studied before this session
+18. Less than 6 months
+Using the app helped me better understand the four Mandarin tones.
+1. 4
+2. 4
+3. 4
+4. 5
+5. 4
+6. 3
+7. 4
+8. 4
+9. 5
+10. 4
+11. 3
+12. 3
+13. 3
+14. 3
+15. 4
+16. 2
+17. 4
+18. 4
+The pitch contour visualization helped me identify errors in my pronunciation.
+1. 5
+2. 5
+3. 4
+4. 5
+5. 4
+6. 3
+7. 4
+8. 5
+9. 5
+10. 4
+11. 4
+12. 2
+13. 1
+14. 3
+15. 4
+16. 4
+17. 5
+18. 4
+The corrective feedback helped me understand how to improve.
+1. 4
+2. 4
+3. 4
+4. 5
+5. 4
+6. 2
+7. 4
+8. 5
+9. 4
+10. 4
+11. 4
+12. 4
+13. 1
+14. 3
+15. 4
+16. 5
+17. 5
+18. 4
+Overall, I found the app useful for learning Mandarin tones.
+1. 4
+2. 4
+3. 4
+4. 5
+5. 4
+6. 3
+7. 4
+8. 5
+9. 5
+10. 4
+11. 4
+12. 4
+13. 1
+14. 4
+15. 5
+16. 5
+17. 5
+18. 4
+I found the app easy to navigate.
+1. 3
+2. 4
+3. 3
+4. 5
+5. 4
+6. 4
+7. 4
+8. 4
+9. 5
+10. 3
+11. 4
+12. 4
+13. 1
+14. 4
+15. 4
+16. 5
+17. 5
+18. 4
+Recording my voice and getting feedback was straightforward.
+1. 4
+2. 4
+3. 4
+4. 5
+5. 5
+6. 5
+7. 4
+8. 5
+9. 5
+10. 4
+11. 4
+12. 2
+13. 2
+14. 3
+15. 4
+16. 5
+17. 4
+18. 4
+I would use this app again to practice Mandarin tones.
+1. 4
+2. 4
+3. 4
+4. 5
+5. 5
+6. 3
+7. 4
+8. 4
+9. 5
+10. 4
+11. 4
+12. 4
+13. 1
+14. 4
+15. 5
+16. 5
+17. 5
+18. 4
+I would recommend this app to other Mandarin learners.
+1. 4
+2. 4
+3. 4
+4. 5
+5. 4
+6. 4
+7. 3
+8. 5
+9. 5
+10. 4
+11. 4
+12. 4
+13. 1
+14. 4
+15. 5
+16. 5
+17. 5
+18. 5
+Do you have any other feedback?
+1.
+2.
+3. The app could include more words to practice.
+4.
+5. I wasn't able to find a button or a way to hear an example of the word before reciting it in the practice site. Maybe that was intentional! If it was, maybe make it clear that you can't hear the word before saying it.
+6. I speak standard Mandarin without an accent. The system incorrectly marked several of my pronunciations as incorrect.
+7.
+8.
+9. The app is well planned and designed in a way it makes it very easy for the used to learn Mandarin.
+10.
+11. no
+12. It would be nice if the "too noisy or too quiet" feedback was more specific on which was the problem- I got it frequently even though the recording sounded fine, so I wasn't sure how to address the issue. It would also be helpful to have the recording end automatically when no sound was detected. Example recordings would also be helpful.
+13. I couldn't figure out how to get past the first page, assuming there's more than one word given for mono and disyllabic words. I was evaluated as incorrect every time after multiple tries. I grew up speaking mandarin, so it might be a problem that I couldn't get a correct answer.
+14. FF05BA9B
+15. N/A
+16. n/a
+17. This is a very interesting idea that can be very helpful for people learning a new language.
+18. The app for practicing didn't have a clear indication of where to click to do what. The words and the interactable parts of the screen were mixed too much in my opinion. Still, very usable.
