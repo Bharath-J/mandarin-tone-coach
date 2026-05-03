@@ -260,6 +260,14 @@ def classify(features: dict, feature_cols: list,
     if predicted == 2:
         if features["f0_min_pos"] >= 0.40 and features["f0_min"] < -1.5:
             predicted = 3
+        # Stop-initial syllables (k-, p-, t-) have voiceless onsets stripped by
+        # trim_silence, so voicing starts mid-dip: the minimum appears earlier
+        # (0.25–0.39) and shallower than the main threshold catches.
+        # Confirm T3 by requiring the pitch rises back up after the minimum.
+        elif features["f0_min_pos"] >= 0.25 and features["f0_min"] < -1.0:
+            late_mean = np.mean([features.get(f"f0_{i:02d}", 0) for i in range(8, 11)])
+            if late_mean > features["f0_min"] + 0.5:
+                predicted = 3
 
     # T1/T2 correction: compressed pitch range (common in disyllabic second syllables)
     # If classified as T1 but pitch is consistently rising, likely a T2 with small range.
