@@ -277,6 +277,20 @@ def classify(features: dict, feature_cols: list,
         if features["f0_min_pos"] < 0.35 and features["f0_01"] < -0.5:
             predicted = 2
 
+    # T1/T4 correction: glide-initial syllables (y-, w-) have a voiced onset that is
+    # high-pitched. If the recording captures mostly the glide before the fall begins,
+    # the contour looks flat/high → T1, even though the underlying tone is T4.
+    # Two checks: half-mean drop (broad) OR endpoint drop (targeted for short falls
+    # where the y-glide keeps the first half elevated, e.g. yè → T4 misread as T1).
+    if predicted == 1:
+        early_mean    = np.mean([features.get(f"f0_{i:02d}", 0) for i in range(1, 6)])
+        late_mean     = np.mean([features.get(f"f0_{i:02d}", 0) for i in range(6, 11)])
+        first_to_last = features.get("f0_01", 0) - features.get("f0_10", 0)
+        half_falling     = early_mean - late_mean > 2.0 and features["f0_slope"] < -1.5
+        endpoint_falling = first_to_last > 2.0 and features["f0_slope"] < -1.2
+        if half_falling or endpoint_falling:
+            predicted = 4
+
     # Confidence scores
     if hasattr(clf, "decision_function"):
         scores     = clf.decision_function(feature_scaled)[0]
